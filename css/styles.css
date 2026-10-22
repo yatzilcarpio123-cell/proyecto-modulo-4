@@ -3,13 +3,13 @@
 Aplicamos estas propiedades a todos los elementos de la página
 ========================================= */
 * {
-  
+
 /* Hace que padding y border formen parte del tamaño total del elemento */
     box-sizing: border-box;
-    
+
 /* Eliminamos los márgenes predeterminados del navegador */
     margin: 0;
-    
+
 /* Eliminamos los espacios internos predeterminados */
     padding: 0;
 }
@@ -17,34 +17,35 @@ Aplicamos estas propiedades a todos los elementos de la página
 /* ========================================= 
 	CONFIGURACIÓN GENERAL DE LA PÁGINA 
 ========================================= */
-/* La página tendrá como mínimo la altura completa de la ventana del navegador */
-/* Definimos las fuentes principales utilizadas por la aplicación */
-/* Color de fondo general */
-/* Color principal del texto */
+/* Fondo basado en el tono verde menta claro de las paletas */
 body {
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f6f8;
-    color: #1f2937;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background-color:
+        #e9f1e8;
+
+    color:
+        #2d4036;
 }
 
 
 /* ========================================= 
 		CONTENEDOR PRINCIPAL 
 ========================================= */
-/* El contenedor ocupará como mínimo toda la altura de la ventana */
-/* Activamos Flexbox para organizar los elementos internos */
-/* Colocamos los elementos verticalmente con flex-direction*/
-/* Centramos horizontalmente los elementos con aling.-items */
-/* Centramos verticalmente los elementos justify-content */
-/* Espacio entre los elementos internos */
-/* Espacio interno del contenedor */
-/* Centramos el contenido de texto */
 .app {
     min-height: 100vh;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 16px;
@@ -57,15 +58,355 @@ body {
 /* ========================================= 
 		TÍTULO PRINCIPAL 	
 ========================================= */
-/* Tamaño del título principal */
 .app h1 {
     font-size: 2rem;
+
+    color:
+        #608573;
 }
 
 /* ========================================= 
 			PÁRRAFOS 
 ========================================= */
-/* Tamaño del texto informativo */
 .app p {
     font-size: 1rem;
+
+    color:
+        #829d8a;
+}
+
+
+/* =========================================
+   AUTENTICACIÓN
+========================================= */
+
+.auth-page {
+    min-height: 100vh;
+
+    padding: 48px 24px;
+
+    background-color:
+        #fbf4f6;
+}
+
+
+.auth-header {
+    max-width: 900px;
+
+    margin:
+        0 auto
+        32px;
+
+    text-align: center;
+}
+
+
+.auth-header h1 {
+    margin-bottom: 12px;
+
+    font-size: 2rem;
+
+    color:
+        #608573;
+}
+
+
+.auth-header p {
+    margin-bottom: 8px;
+
+    color:
+        #829d8a;
+}
+
+
+.auth-header span {
+    font-size: 0.9rem;
+
+    color:
+        #b2cbbe;
+
+    background-color:
+        #f4eaed;
+
+    padding:
+        4px 12px;
+
+    border-radius:
+        12px;
+}
+
+
+.auth-container {
+    width: min(
+        900px,
+        100%
+    );
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 24px;
+}
+
+
+.auth-card {
+    padding: 28px;
+
+    background-color:
+        #ffffff;
+
+    border-radius: 12px;
+
+    border-top:
+        6px solid
+        #608573;
+
+    box-shadow:
+        0 10px 25px
+        rgba(
+            96,
+            133,
+            115,
+            0.12
+        );
+}
+
+
+.auth-card h2 {
+    margin-bottom: 24px;
+
+    color:
+        #608573;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+}
+
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+
+.form-group label {
+    display: flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    margin-bottom: 8px;
+
+    font-weight: 600;
+
+    color:
+        #608573;
+}
+
+
+.form-group input {
+    width: 100%;
+
+    padding:
+        12px 14px;
+
+    border:
+        1px solid
+        #b2cbbe;
+
+    border-radius:
+        8px;
+
+    font-size: 1rem;
+
+    background-color:
+        #fafaf9;
+
+    color:
+        #2d4036;
+}
+
+
+.form-group input:focus {
+    outline:
+        none;
+
+    border-color:
+        #829d8a;
+
+    background-color:
+        #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            130,
+            157,
+            138,
+            0.2
+        );
+}
+
+
+.btn {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    min-height:
+        44px;
+
+    width:
+        100%;
+
+    padding:
+        10px 18px;
+
+    border:
+        none;
+
+    border-radius:
+        8px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        1rem;
+
+    font-weight:
+        600;
+}
+
+
+.btn-primary {
+    background-color:
+        #608573;
+
+    color:
+        #ffffff;
+}
+
+
+.btn-primary:hover {
+    background-color:
+        #4f7060;
+}
+
+
+/* =========================================
+   ESTILOS DE ÍCONOS
+========================================= */
+
+.auth-card h2 i,
+.form-group label i {
+    color:
+        #829d8a;
+}
+
+
+/* =========================================
+   DASHBOARD SIMPLE
+========================================= */
+
+.dashboard-page {
+    min-height:
+        100vh;
+
+    background-color:
+        #e9f1e8;
+}
+
+
+.dashboard-simple {
+    width:
+        min(
+            900px,
+            90%
+        );
+
+    margin:
+        60px auto;
+
+    padding:
+        32px;
+
+    background-color:
+        #ffffff;
+
+    border-radius:
+        12px;
+
+    border-left:
+        6px solid
+        #608573;
+
+    box-shadow:
+        0 10px 25px
+        rgba(
+            96,
+            133,
+            115,
+            0.12
+        );
+}
+
+
+.dashboard-simple h1 {
+    margin-bottom:
+        16px;
+
+    color:
+        #608573;
+}
+
+
+.dashboard-simple p {
+    margin-bottom:
+        24px;
+
+    color:
+        #829d8a;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (
+    max-width: 768px
+) {
+    .auth-container {
+        grid-template-columns:
+            1fr;
+    }
+
+    .auth-page {
+        padding:
+            32px 16px;
+    }
 }
