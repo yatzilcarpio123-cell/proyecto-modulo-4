@@ -28,6 +28,8 @@ import { Usuario } from './models/Usuario.js';
 import { Cuenta } from './models/Cuenta.js';
 import { Movimiento } from './models/Movimiento.js';
 
+import { Banco } from './models/Banco.js';
+
 
 /* ========================================= 
 	PUNTO DE ENTRADA DE LA APLICACIÓN 
@@ -72,16 +74,20 @@ console.log(
     formatAccountNumber('123456789012'),
 );
 
+/* BANCO */
+const bancoDemo = new Banco;
+
 /* ========================================== 
 			USUARIO 
 ========================================== */ 
-/* Creamos nuestra primera instancia de la clase Usuario. */
 const usuarioDemo = new Usuario({
     nombre: 'Yatzil Carpio',
     email: 'yatzil@correo.com',
     telefono: '5580970111',
     password: '123456',
 });
+bancoDemo.agregarUsuario(usuarioDemo);
+console.log('Usuarios registrados:', bancoDemo.usuarios);
 
 console.log(
     'Usuario: ',
@@ -102,15 +108,51 @@ console.log(
     cuentaDemo,
 );
 
-/* ========================================== 
-				DEPOSITO DE DEMOSTRACIÓN
-========================================== */
-cuentaDemo.depositar(1000);
+bancoDemo.agregarCuenta(cuentaDemo);
 
+//DEPOSITO
+const depositoDemo = bancoDemo.realizarDeposito({
+    cuentaId: cuentaDemo.id,
+    monto: 1000,
+    descripcion: 'Desposito inicial'
+});
+
+//mostramos el saldio
+console.log('Saldo actual:', formatCurrency(cuentaDemo.saldo));
+
+//mostramos el movimiento generado
+console.log('Movimiento generado:', depositoDemo);
+
+//mostramos el historial general
 console.log(
-    'Saldo después del depósito:',
-    formatCurrency(cuentaDemo.saldo),
+    'Movimientos registrados: ',
+    bancoDemo.movimientos,
 );
+
+/* BUSQUEDAS */
+const usuarioEncontrado = bancoDemo.buscarUsuarioPorId(usuarioDemo.id);
+console.log('Usuario encontrado:', usuarioEncontrado); 
+console.log(usuarioEncontrado === usuarioDemo);
+
+const cuentasUsuario = bancoDemo.obtenerCuentasdeUsuario(usuarioDemo.id);
+console.log('Cuentas del usuario: ', cuentasUsuario);
+
+/* RELACIONES */
+console.log('La cuenta pertenece al usuario:', usuarioDemo.id === cuentaDemo.usuarioId);
+console.log ('El deposito pertenece a la cuenta:', cuentaDemo.id === depositoDemo.id === depositoDemo.cuentaOrigen);
+
+/* REGLA NEGATIVA */
+try {
+    bancoDemo.realizarDeposito({
+        cuentaId: cuentaDemo.depositar,
+        monto: -100,
+    });
+} catch (error) {
+    console.log(
+        'Error',
+        error.message);
+    
+}
 
 /* ========================================== 
 				MOVIMIENTO
