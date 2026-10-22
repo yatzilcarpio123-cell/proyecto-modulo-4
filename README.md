@@ -29,7 +29,7 @@ El proyecto utiliza las siguientes capas:
 
 ## Arquitectura actual
 
-```powershell
+```text
 js/
 ├── main.js
 │
@@ -41,6 +41,7 @@ js/
 │
 ├── services/
 │   ├── AuthService.js
+│   ├── BancoService.js
 │   └── StorageService.js
 │
 ├── ui/
@@ -52,25 +53,23 @@ js/
     └── validators.js
 ```
 
-## Páginas actuales
+## Models
 
-### index.html
+### Usuario
 
-Contiene:
+Representa a una persona registrada en el sistema.
 
-- Formulario de inicio de sesión.
-- Formulario de registro.
-- Integración de SweetAlert2.
+### Cuenta
 
-### dashboard.html
+Representa una cuenta bancaria perteneciente a un usuario.
 
-Representa la primera página protegida del sistema.
+### Movimiento
 
-Actualmente permite:
+Representa una operación bancaria.
 
-- Validar la existencia de una sesión.
-- Mostrar al usuario autenticado.
-- Cerrar sesión.
+### Banco
+
+Coordina usuarios, cuentas y movimientos y contiene reglas del dominio bancario.
 
 ## Services
 
@@ -78,7 +77,7 @@ Actualmente permite:
 
 Centraliza la comunicación con LocalStorage.
 
-Métodos:
+Métodos principales:
 
 - `guardar()`
 - `obtener()`
@@ -87,85 +86,89 @@ Métodos:
 
 ### AuthService
 
-Centraliza la autenticación y sesión.
+Gestiona autenticación y sesión.
 
-Métodos:
+Métodos principales:
 
 - `login()`
 - `logout()`
 - `getCurrentUser()`
 - `protegerRuta()`
 
-## Claves de almacenamiento
+### BancoService
 
-El sistema utiliza:
+Conecta los datos persistidos con los modelos del dominio.
 
-- `STORAGE_KEYS.USUARIOS`
-- `STORAGE_KEYS.CUENTAS`
-- `STORAGE_KEYS.MOVIMIENTOS`
-- `STORAGE_KEYS.SESION`
+Métodos principales:
 
-## Registro de usuarios
+- `cargarBanco()`
+- `obtenerInstanciaBanco()`
+- `recargarBanco()`
+- `guardarBanco()`
+- `obtenerDatosUsuario()`
+- `obtenerResumenUsuario()`
 
-Al registrar un usuario:
+## Dashboard
 
-1. Se validan los datos.
-2. Se comprueba que el correo no esté registrado.
-3. Se crea una instancia de `Usuario`.
-4. Se genera un número de cuenta.
-5. Se crea una instancia de `Cuenta`.
-6. Se relaciona la cuenta mediante `usuarioId`.
-7. Usuario y cuenta se guardan en LocalStorage.
+El dashboard permite mostrar información correspondiente al usuario autenticado.
 
-## Autenticación
+Actualmente muestra:
 
-El inicio de sesión:
+- Nombre del usuario.
+- Saldo total.
+- Cantidad de cuentas.
+- Cantidad de movimientos.
+- Número de cuenta principal.
+- Tipo de cuenta.
+- Saldo disponible.
 
-1. Recupera los usuarios almacenados.
-2. Busca coincidencia de correo y contraseña.
-3. Crea una sesión.
-4. Guarda la sesión en LocalStorage.
-5. Redirige al dashboard.
+## Flujo de información
 
-## SweetAlert2
-
-SweetAlert2 se utiliza para:
-
-- Alertas de validación.
-- Registro exitoso.
-- Errores de autenticación.
-- Login exitoso.
-- Confirmación de cierre de sesión.
+```text
+LocalStorage
+    ↓
+StorageService
+    ↓
+BancoService
+    ↓
+Banco
+    ↓
+DashboardUI
+    ↓
+dashboard.html
+```
 
 ## Funcionalidades implementadas
 
 Actualmente el sistema permite:
 
 - Registrar usuarios.
-- Crear una cuenta bancaria automáticamente.
+- Crear una cuenta automáticamente.
 - Evitar correos duplicados.
-- Persistir usuarios y cuentas.
 - Iniciar sesión.
-- Mantener la sesión después de recargar.
-- Proteger páginas.
-- Mostrar al usuario autenticado.
+- Mantener sesión.
 - Cerrar sesión.
-- Mostrar alertas con SweetAlert2.
+- Proteger páginas.
+- Persistir información.
+- Reconstruir modelos desde LocalStorage.
+- Consultar información bancaria.
+- Calcular saldo total.
+- Consultar cuentas del usuario.
+- Consultar movimientos.
+- Mostrar un dashboard dinámico.
+- Utilizar SweetAlert2 para mensajes y confirmaciones.
 
-## Funcionalidades siguientes
+## Navegación prevista
 
-Durante las siguientes versiones se desarrollarán:
+La aplicación tendrá las páginas:
 
-- Dashboard bancario completo.
-- Consulta de saldo.
-- Información de cuenta.
-- Gestión del perfil.
-- Depósitos desde interfaz.
-- Transferencias.
-- Historial de movimientos.
-- Validaciones adicionales.
-- Pruebas automatizadas con Jest.
+- `dashboard.html`
+- `cuenta.html`
+- `movimientos.html`
+- `transferencia.html`
+
+Las páginas restantes serán implementadas progresivamente en las siguientes versiones.
 
 ## Versión actual
 
-v0.6.0 — Registro, autenticación, sesión y SweetAlert2.
+v0.7.0 — BancoService y Dashboard bancario.

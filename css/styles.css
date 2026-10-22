@@ -1,23 +1,10 @@
-/* ========================================= 
-			RESETEO GENERAL
-Aplicamos estas propiedades a todos los elementos de la página
-========================================= */
 * {
-
-/* Hace que padding y border formen parte del tamaño total del elemento */
     box-sizing: border-box;
-
-/* Eliminamos los márgenes predeterminados del navegador */
     margin: 0;
-
-/* Eliminamos los espacios internos predeterminados */
     padding: 0;
 }
 
-/* ========================================= 
-	CONFIGURACIÓN GENERAL DE LA PÁGINA 
-========================================= */
-/* Fondo basado en el tono verde menta claro de las paletas */
+
 body {
     min-height: 100vh;
 
@@ -27,52 +14,10 @@ body {
         sans-serif;
 
     background-color:
-        #e9f1e8;
+        #f4f6f8;
 
     color:
-        #2d4036;
-}
-
-
-/* ========================================= 
-		CONTENEDOR PRINCIPAL 
-========================================= */
-.app {
-    min-height: 100vh;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 16px;
-
-    padding: 24px;
-
-    text-align: center;
-}
-
-/* ========================================= 
-		TÍTULO PRINCIPAL 	
-========================================= */
-.app h1 {
-    font-size: 2rem;
-
-    color:
-        #608573;
-}
-
-/* ========================================= 
-			PÁRRAFOS 
-========================================= */
-.app p {
-    font-size: 1rem;
-
-    color:
-        #829d8a;
+        #1f2937;
 }
 
 
@@ -84,9 +29,6 @@ body {
     min-height: 100vh;
 
     padding: 48px 24px;
-
-    background-color:
-        #fbf4f6;
 }
 
 
@@ -105,9 +47,6 @@ body {
     margin-bottom: 12px;
 
     font-size: 2rem;
-
-    color:
-        #608573;
 }
 
 
@@ -115,7 +54,7 @@ body {
     margin-bottom: 8px;
 
     color:
-        #829d8a;
+        #6b7280;
 }
 
 
@@ -123,16 +62,7 @@ body {
     font-size: 0.9rem;
 
     color:
-        #b2cbbe;
-
-    background-color:
-        #f4eaed;
-
-    padding:
-        4px 12px;
-
-    border-radius:
-        12px;
+        #6b7280;
 }
 
 
@@ -149,7 +79,10 @@ body {
     grid-template-columns:
         repeat(
             2,
-            minmax(0, 1fr)
+            minmax(
+                0,
+                1fr
+            )
         );
 
     gap: 24px;
@@ -164,35 +97,19 @@ body {
 
     border-radius: 12px;
 
-    border-top:
-        6px solid
-        #608573;
-
     box-shadow:
-        0 10px 25px
+        0 10px 30px
         rgba(
-            96,
-            133,
-            115,
-            0.12
+            0,
+            0,
+            0,
+            0.08
         );
 }
 
 
 .auth-card h2 {
     margin-bottom: 24px;
-
-    color:
-        #608573;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        8px;
 }
 
 
@@ -202,20 +119,11 @@ body {
 
 
 .form-group label {
-    display: flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
+    display: block;
 
     margin-bottom: 8px;
 
     font-weight: 600;
-
-    color:
-        #608573;
 }
 
 
@@ -227,39 +135,22 @@ body {
 
     border:
         1px solid
-        #b2cbbe;
+        #d1d5db;
 
     border-radius:
         8px;
 
     font-size: 1rem;
-
-    background-color:
-        #fafaf9;
-
-    color:
-        #2d4036;
 }
 
 
 .form-group input:focus {
     outline:
-        none;
+        2px solid
+        #2563eb;
 
     border-color:
-        #829d8a;
-
-    background-color:
-        #ffffff;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(
-            130,
-            157,
-            138,
-            0.2
-        );
+        transparent;
 }
 
 
@@ -273,38 +164,26 @@ body {
     justify-content:
         center;
 
-    gap:
-        8px;
-
-    min-height:
-        44px;
-
-    width:
-        100%;
+    min-height: 44px;
 
     padding:
         10px 18px;
 
-    border:
-        none;
+    border: none;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
-    font-size:
-        1rem;
+    font-size: 1rem;
 
-    font-weight:
-        600;
+    font-weight: 600;
 }
 
 
 .btn-primary {
     background-color:
-        #608573;
+        #2563eb;
 
     color:
         #ffffff;
@@ -313,83 +192,334 @@ body {
 
 .btn-primary:hover {
     background-color:
-        #4f7060;
+        #1d4ed8;
 }
 
 
-/* =========================================
-   ESTILOS DE ÍCONOS
-========================================= */
+.btn-secondary {
+    background-color:
+        #111827;
 
-.auth-card h2 i,
-.form-group label i {
     color:
-        #829d8a;
+        #ffffff;
+}
+
+
+.btn-secondary:hover {
+    background-color:
+        #374151;
 }
 
 
 /* =========================================
-   DASHBOARD SIMPLE
+   DASHBOARD
 ========================================= */
 
-.dashboard-page {
-    min-height:
-        100vh;
+.app-dashboard {
+    min-height: 100vh;
 
     background-color:
-        #e9f1e8;
+        #f4f6f8;
 }
 
 
-.dashboard-simple {
-    width:
-        min(
-            900px,
-            90%
-        );
+.topbar {
+    display: flex;
 
-    margin:
-        60px auto;
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    gap: 24px;
 
     padding:
-        32px;
+        20px
+        clamp(
+            20px,
+            5vw,
+            72px
+        );
 
     background-color:
         #ffffff;
 
-    border-radius:
-        12px;
+    border-bottom:
+        1px solid
+        #e5e7eb;
+}
 
-    border-left:
-        6px solid
-        #608573;
+
+.topbar h1 {
+    margin-bottom: 4px;
+
+    font-size: 1.5rem;
+}
+
+
+.topbar p {
+    color:
+        #6b7280;
+}
+
+
+.dashboard-nav {
+    display: flex;
+
+    gap: 12px;
+
+    padding:
+        14px
+        clamp(
+            20px,
+            5vw,
+            72px
+        );
+
+    overflow-x: auto;
+
+    background-color:
+        #ffffff;
+
+    border-bottom:
+        1px solid
+        #e5e7eb;
+}
+
+
+.dashboard-nav a {
+    padding:
+        9px 14px;
+
+    color:
+        #374151;
+
+    text-decoration: none;
+
+    border-radius:
+        8px;
+}
+
+
+.dashboard-nav a:hover,
+.dashboard-nav a.active {
+    background-color:
+        #eff6ff;
+
+    color:
+        #1d4ed8;
+}
+
+
+.dashboard-content {
+    width:
+        min(
+            1100px,
+            92%
+        );
+
+    margin:
+        32px auto;
+
+    display: grid;
+
+    gap: 24px;
+}
+
+
+.dashboard-welcome {
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    gap: 24px;
+
+    padding: 28px;
+
+    background-color:
+        #ffffff;
+
+    border-radius: 14px;
 
     box-shadow:
-        0 10px 25px
+        0 8px 24px
         rgba(
-            96,
-            133,
-            115,
-            0.12
+            0,
+            0,
+            0,
+            0.06
         );
 }
 
 
-.dashboard-simple h1 {
-    margin-bottom:
-        16px;
+.dashboard-label {
+    margin-bottom: 6px;
 
     color:
-        #608573;
+        #2563eb;
+
+    font-weight: 700;
 }
 
 
-.dashboard-simple p {
-    margin-bottom:
-        24px;
+.dashboard-welcome h2 {
+    margin-bottom: 8px;
+
+    font-size: 1.8rem;
+}
+
+
+.dashboard-welcome p {
+    color:
+        #6b7280;
+}
+
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 18px;
+}
+
+
+.summary-card {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 24px;
+
+    background-color:
+        #ffffff;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            0,
+            0,
+            0,
+            0.05
+        );
+}
+
+
+.summary-card span {
+    color:
+        #6b7280;
+
+    font-size:
+        0.9rem;
+}
+
+
+.summary-card strong {
+    font-size:
+        1.6rem;
 
     color:
-        #829d8a;
+        #111827;
+}
+
+
+.dashboard-section {
+    padding: 28px;
+
+    background-color:
+        #ffffff;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            0,
+            0,
+            0,
+            0.05
+        );
+}
+
+
+.section-header {
+    margin-bottom: 22px;
+}
+
+
+.section-header span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        #6b7280;
+
+    font-size:
+        0.9rem;
+}
+
+
+.account-card {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 18px;
+}
+
+
+.account-card div {
+    padding: 18px;
+
+    background-color:
+        #f9fafb;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius: 10px;
+}
+
+
+.account-card span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        #6b7280;
+
+    font-size:
+        0.85rem;
+}
+
+
+.account-card strong {
+    font-size:
+        1.1rem;
 }
 
 
@@ -405,8 +535,25 @@ body {
             1fr;
     }
 
+
     .auth-page {
         padding:
             32px 16px;
+    }
+
+
+    .summary-grid,
+    .account-card {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .topbar {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
     }
 }

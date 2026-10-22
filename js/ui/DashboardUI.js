@@ -1,52 +1,206 @@
-/* IMPORTAMOS AUTH SERVICE*/
 import {
     authService,
 } from '../services/AuthService.js';
 
-/* MOSTRAMOS AL USUARIO */
-function mostrarUsuario() {
+import {
+    bancoService,
+} from '../services/BancoService.js';
 
-	/* OBTENEMOS EL USUARIO ACTUAL */
-    const usuario =
-        authService
-            .getCurrentUser();
+import {
+    formatCurrency,
+    formatAccountNumber,
+} from '../utils/formatters.js';
 
-	/* VALIDAMOS AL USUARIO */
-    if (!usuario) {
+
+function renderDashboard(
+    resumen,
+) {
+    const root =
+        document.querySelector(
+            '#dashboardRoot',
+        );
+
+
+    if (!root) {
         return;
     }
 
-	/* OBTENEMOS EL ELEMENTO  */
-    const nombreUsuario =
-        document.querySelector(
-            '#nombreUsuario',
-        );
 
-	/* MOSTRAMOS EL NOMBRE */
-    if (nombreUsuario) {
-        nombreUsuario.textContent =
-            `Sesión iniciada como ${usuario.nombre}`;
-    }
+    const {
+        usuario,
+        cuentas,
+        saldoTotal,
+        totalCuentas,
+        totalMovimientos,
+    } = resumen;
+
+
+    const cuentaPrincipal =
+        cuentas[0] || null;
+
+
+    root.innerHTML = `
+        <section
+            class="dashboard-welcome"
+        >
+            <div>
+                <p
+                    class="dashboard-label"
+                >
+                    Bienvenido
+                </p>
+
+                <h2>
+                    ${usuario.nombre}
+                </h2>
+
+                <p>
+                    Consulta el estado
+                    actual de tus cuentas.
+                </p>
+            </div>
+        </section>
+
+
+        <section
+            class="summary-grid"
+        >
+
+            <article
+                class="summary-card"
+            >
+                <span>
+                    Saldo total
+                </span>
+
+                <strong>
+                    ${formatCurrency(
+                        saldoTotal,
+                    )}
+                </strong>
+            </article>
+
+
+            <article
+                class="summary-card"
+            >
+                <span>
+                    Cuentas
+                </span>
+
+                <strong>
+                    ${totalCuentas}
+                </strong>
+            </article>
+
+
+            <article
+                class="summary-card"
+            >
+                <span>
+                    Movimientos
+                </span>
+
+                <strong>
+                    ${totalMovimientos}
+                </strong>
+            </article>
+
+        </section>
+
+
+        <section
+            class="dashboard-section"
+        >
+
+            <header
+                class="section-header"
+            >
+                <div>
+                    <span>
+                        Cuenta principal
+                    </span>
+
+                    <h3>
+                        Información bancaria
+                    </h3>
+                </div>
+            </header>
+
+
+            ${
+                cuentaPrincipal
+                    ? `
+                        <article
+                            class="account-card"
+                        >
+                            <div>
+                                <span>
+                                    Número de cuenta
+                                </span>
+
+                                <strong>
+                                    ${formatAccountNumber(
+                                        cuentaPrincipal
+                                            .numeroCuenta,
+                                    )}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>
+                                    Tipo
+                                </span>
+
+                                <strong>
+                                    ${cuentaPrincipal.tipo}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>
+                                    Saldo disponible
+                                </span>
+
+                                <strong>
+                                    ${formatCurrency(
+                                        cuentaPrincipal
+                                            .saldo,
+                                    )}
+                                </strong>
+                            </div>
+                        </article>
+                    `
+                    : `
+                        <p>
+                            No tienes cuentas
+                            bancarias registradas.
+                        </p>
+                    `
+            }
+
+        </section>
+    `;
 }
 
-/* INICIALIZAMOS EL LOGOUT*/
-function inicializarLogout() {
-    const logoutBtn =
+
+function initLogout() {
+    const btn =
         document.querySelector(
             '#logoutBtn',
         );
 
-	/*VALIDAMOS BOTON*/
-    if (!logoutBtn) {
+
+    if (!btn) {
         return;
     }
 
-	/* HACEMOS EVENTO CLICK */
-    logoutBtn.addEventListener(
+
+    btn.addEventListener(
         'click',
         () => {
-        
-	        /* CONFIRMA SALIDA*/
             Swal.fire({
                 icon: 'question',
                 title:
@@ -59,42 +213,75 @@ function inicializarLogout() {
                     'Sí, salir',
                 cancelButtonText:
                     'Cancelar',
-            }).then((result) => {
-	            
-	            /* CANCELAR LA SALIDA*/
-                if (
-                    !result.isConfirmed
-                ) {
-                    return;
-                }
+            }).then(
+                (result) => {
+                    if (
+                        !result
+                            .isConfirmed
+                    ) {
+                        return;
+                    }
 
-				/* CERRAR SESION */
-                authService.logout();
 
-				/* REDIRIGIR*/
-                window.location.href =
-                    'index.html';
-            });
+                    authService.logout();
+
+
+                    window.location.href =
+                        'index.html';
+                },
+            );
         },
     );
 }
 
-/* INICIALIZAE DASHBOARD */
-function init() {
 
+function init() {
     const accesoPermitido =
         authService
             .protegerRuta();
 
-	/* DETENER SIN ACCESO */
+
     if (!accesoPermitido) {
         return;
     }
 
-	/* MOSTRAMOS EL USUARIO */
-    mostrarUsuario();
-    
-    /* =ACTIVAMOS EL LOGOUT */
-    inicializarLogout();
+
+    const usuario =
+        authService
+            .getCurrentUser();
+
+
+    if (!usuario) {
+        return;
+    }
+
+
+    try {
+        bancoService
+            .recargarBanco();
+
+
+        const resumen =
+            bancoService
+                .obtenerResumenUsuario(
+                    usuario.id,
+                );
+
+
+        renderDashboard(
+            resumen,
+        );
+
+
+        initLogout();
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title:
+                'No fue posible cargar el dashboard',
+            text:
+                error.message,
+        });
+    }
 }
 init();
