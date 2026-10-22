@@ -91,7 +91,7 @@ buscarCuentaPorNumero(numeroCuenta){
 }
 
 // OBTENEMOS CUENTAS DE USUARIO
-obtenerCuentasdeUsuario(usuarioId){
+obtenerCuentasDeUsuario(usuarioId){
     return this.cuentas.filter((cuenta) => cuenta.usuarioId === usuarioId,);
 }
 
@@ -136,7 +136,7 @@ realizarDeposito({
 /*obtenemos los movimientos de la cuenta, aquí se va a devolver todos
 los movimientos en los que la cuenta aparezca
 */
-obtenerMovimientosdeCuenta(cuentaId){
+obtenerMovimientosDeCuenta(cuentaId){
     return this.movimientos.filter((movimiento) => movimiento.cuentaOrigen === cuentaId
     || movimiento.cuentaDestino === cuentaId);
 }

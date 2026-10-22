@@ -45,6 +45,7 @@ js/
 │   └── StorageService.js
 │
 ├── ui/
+│   ├── CuentaUI.js
 │   └── DashboardUI.js
 │
 └── utils/
@@ -53,122 +54,122 @@ js/
     └── validators.js
 ```
 
-## Models
+## Páginas actuales
 
-### Usuario
+- `index.html`
+- `dashboard.html`
+- `cuenta.html`
 
-Representa a una persona registrada en el sistema.
+## Mi cuenta
 
-### Cuenta
+La página `cuenta.html` permite consultar:
 
-Representa una cuenta bancaria perteneciente a un usuario.
-
-### Movimiento
-
-Representa una operación bancaria.
-
-### Banco
-
-Coordina usuarios, cuentas y movimientos y contiene reglas del dominio bancario.
-
-## Services
-
-### StorageService
-
-Centraliza la comunicación con LocalStorage.
-
-Métodos principales:
-
-- `guardar()`
-- `obtener()`
-- `eliminar()`
-- `limpiar()`
-
-### AuthService
-
-Gestiona autenticación y sesión.
-
-Métodos principales:
-
-- `login()`
-- `logout()`
-- `getCurrentUser()`
-- `protegerRuta()`
-
-### BancoService
-
-Conecta los datos persistidos con los modelos del dominio.
-
-Métodos principales:
-
-- `cargarBanco()`
-- `obtenerInstanciaBanco()`
-- `recargarBanco()`
-- `guardarBanco()`
-- `obtenerDatosUsuario()`
-- `obtenerResumenUsuario()`
-
-## Dashboard
-
-El dashboard permite mostrar información correspondiente al usuario autenticado.
-
-Actualmente muestra:
-
-- Nombre del usuario.
-- Saldo total.
-- Cantidad de cuentas.
-- Cantidad de movimientos.
-- Número de cuenta principal.
+- Titular.
+- Número de cuenta.
 - Tipo de cuenta.
-- Saldo disponible.
+- Saldo.
+- Fecha de apertura.
+- Estado de la cuenta.
 
-## Flujo de información
+También permite administrar:
 
-```text
-LocalStorage
-    ↓
-StorageService
-    ↓
-BancoService
-    ↓
-Banco
-    ↓
-DashboardUI
-    ↓
-dashboard.html
-```
+- Nombre.
+- Correo electrónico.
+- Teléfono.
+- Contraseña.
+- Eliminación de la cuenta.
+
+## BancoService
+
+Además de las operaciones anteriores, ahora incorpora:
+
+- `actualizarUsuario()`
+- `cambiarPassword()`
+- `eliminarUsuario()`
+
+### actualizarUsuario()
+
+Actualiza:
+
+- nombre
+- email
+- teléfono
+
+y evita utilizar un correo registrado por otro usuario.
+
+### cambiarPassword()
+
+Comprueba:
+
+- existencia del usuario
+- contraseña actual
+- nueva contraseña diferente
+- longitud mínima
+
+### eliminarUsuario()
+
+Elimina:
+
+- usuario
+- cuentas asociadas
+- movimientos asociados
+
+La eliminación solo está permitida cuando las cuentas del usuario tienen saldo cero.
+
+## SweetAlert2
+
+En esta versión se utiliza para:
+
+- Confirmar cierre de sesión.
+- Confirmar eliminación de cuenta.
+- Informar actualización exitosa.
+- Informar cambio de contraseña.
+- Informar eliminación exitosa.
+- Mostrar errores de eliminación.
+
+## Programación funcional aplicada
+
+Se utilizan métodos como:
+
+- `find()`
+- `some()`
+- `map()`
+- `filter()`
+- `includes()`
+- `forEach()`
+
+También se utiliza Spread Operator para actualizar objetos sin eliminar propiedades existentes.
 
 ## Funcionalidades implementadas
 
 Actualmente el sistema permite:
 
 - Registrar usuarios.
-- Crear una cuenta automáticamente.
-- Evitar correos duplicados.
-- Iniciar sesión.
+- Crear cuentas automáticamente.
+- Autenticarse.
 - Mantener sesión.
 - Cerrar sesión.
-- Proteger páginas.
-- Persistir información.
-- Reconstruir modelos desde LocalStorage.
-- Consultar información bancaria.
-- Calcular saldo total.
-- Consultar cuentas del usuario.
-- Consultar movimientos.
-- Mostrar un dashboard dinámico.
-- Utilizar SweetAlert2 para mensajes y confirmaciones.
+- Consultar Dashboard.
+- Consultar datos bancarios.
+- Consultar información personal.
+- Actualizar información personal.
+- Evitar correos duplicados.
+- Cambiar contraseña.
+- Eliminar usuarios con saldo cero.
+- Eliminar datos relacionados.
+- Persistir los cambios en LocalStorage.
 
-## Navegación prevista
+## Próximas funcionalidades
 
-La aplicación tendrá las páginas:
+Las siguientes versiones incorporarán:
 
-- `dashboard.html`
-- `cuenta.html`
-- `movimientos.html`
-- `transferencia.html`
-
-Las páginas restantes serán implementadas progresivamente en las siguientes versiones.
+- Transferencias.
+- Historial de movimientos.
+- Depósitos desde interfaz.
+- Validaciones bancarias adicionales.
+- Pruebas automatizadas con Jest.
+- Refactorización final.
 
 ## Versión actual
 
-v0.7.0 — BancoService y Dashboard bancario.
+v0.8.0 — Gestión de cuenta, perfil y seguridad.
