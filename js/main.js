@@ -19,6 +19,15 @@ import {
     formatAccountNumber,
 } from './utils/formatters.js';
 
+/* ========================================= 
+		IMPORTAR MODELO USUARIO
+		IMPORTAR MODELO CUENTA
+		IMPORTAR MODELO MOVIMIENTO
+========================================= */
+import { Usuario } from './models/Usuario.js';
+import { Cuenta } from './models/Cuenta.js';
+import { Movimiento } from './models/Movimiento.js';
+
 
 /* ========================================= 
 	PUNTO DE ENTRADA DE LA APLICACIÓN 
@@ -61,5 +70,64 @@ console.log(
 console.log(
     'Número de cuenta:',
     formatAccountNumber('123456789012'),
+);
+
+/* ========================================== 
+			USUARIO 
+========================================== */ 
+/* Creamos nuestra primera instancia de la clase Usuario. */
+const usuarioDemo = new Usuario({
+    nombre: 'Yatzil Carpio',
+    email: 'yatzil@correo.com',
+    telefono: '5580970111',
+    password: '123456',
+});
+
+console.log(
+    'Usuario: ',
+    usuarioDemo,
+);
+
+/* ========================================== 
+				CUENTA
+Creamos una cuenta y la asociamos al usuario utilizando su ID
+========================================== */
+const cuentaDemo = new Cuenta({
+    numeroCuenta: '123456789012',
+    usuarioId: usuarioDemo.id,
+});
+
+console.log(
+    'Cuenta: ',
+    cuentaDemo,
+);
+
+/* ========================================== 
+				DEPOSITO DE DEMOSTRACIÓN
+========================================== */
+cuentaDemo.depositar(1000);
+
+console.log(
+    'Saldo después del depósito:',
+    formatCurrency(cuentaDemo.saldo),
+);
+
+/* ========================================== 
+				MOVIMIENTO
+Representamos manualmente el depósito mediante una instancia
+de movimiento
+========================================== */
+const movimientoDemo = new Movimiento({
+    tipo: 'DEPOSITO',
+    monto: 1000,
+    descripcion: 'Depósito inicial',
+    cuentaOrigen: cuentaDemo.id,
+    saldoResultante: cuentaDemo.saldo,
+});
+
+//mostramsos el movimeinto creado
+console.log (
+    'Movimiento: ',
+    movimientoDemo,
 );
 
