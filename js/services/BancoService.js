@@ -21,10 +21,19 @@ import {
 
 
 class BancoService {
+
+    /* =========================================
+       CONSTRUCTOR
+    ========================================= */
+
     constructor() {
         this._banco = null;
     }
 
+
+    /* =========================================
+       CARGA Y PERSISTENCIA DEL BANCO
+    ========================================= */
 
     cargarBanco() {
         const usuariosGuardados =
@@ -46,6 +55,8 @@ class BancoService {
             );
 
 
+        // Reconstruimos las instancias para
+        // recuperar también sus métodos.
         const usuarios =
             usuariosGuardados.map(
                 (usuario) =>
@@ -84,12 +95,14 @@ class BancoService {
             return this.cargarBanco();
         }
 
+
         return this._banco;
     }
 
 
     recargarBanco() {
         this._banco = null;
+
 
         return this.cargarBanco();
     }
@@ -119,6 +132,10 @@ class BancoService {
         return true;
     }
 
+
+    /* =========================================
+       CONSULTAS DEL USUARIO
+    ========================================= */
 
     obtenerDatosUsuario(
         usuarioId,
@@ -157,6 +174,8 @@ class BancoService {
             );
 
 
+        // Evitamos que un mismo movimiento
+        // sea incluido más de una vez.
         const movimientos =
             movimientosSinFiltrar.filter(
                 (
@@ -220,6 +239,95 @@ class BancoService {
         };
     }
 
+
+    /* =========================================
+       OPERACIONES BANCARIAS
+    ========================================= */
+
+    realizarDeposito({
+        cuentaId,
+        monto,
+        descripcion = '',
+    }) {
+        const banco =
+            this.obtenerInstanciaBanco();
+
+
+        const movimiento =
+            banco.realizarDeposito({
+                cuentaId,
+                monto,
+                descripcion,
+            });
+
+
+        // Guardamos el nuevo saldo y
+        // el movimiento generado.
+        this.guardarBanco();
+
+
+        return movimiento;
+    }
+
+
+    realizarTransferencia({
+        cuentaOrigenId,
+        numeroCuentaDestino,
+        monto,
+        descripcion = '',
+    }) {
+        const banco =
+            this.obtenerInstanciaBanco();
+
+
+        // Permitimos que el usuario escriba
+        // el número con o sin espacios.
+        const numeroDestino =
+            String(
+                numeroCuentaDestino,
+            )
+                .replace(
+                    /\s/g,
+                    '',
+                )
+                .trim();
+
+
+        const cuentaDestino =
+            banco.buscarCuentaPorNumero(
+                numeroDestino,
+            );
+
+
+        if (!cuentaDestino) {
+            throw new Error(
+                'La cuenta destino no existe.',
+            );
+        }
+
+
+        const resultado =
+            banco.realizarTransferencia({
+                cuentaOrigenId,
+                cuentaDestinoId:
+                    cuentaDestino.id,
+                monto,
+                descripcion,
+            });
+
+
+        // Persistimos ambos saldos y los
+        // dos movimientos generados.
+        this.guardarBanco();
+
+
+        return resultado;
+    }
+
+
+    /* =========================================
+       ACTUALIZAR USUARIO
+    ========================================= */
 
     actualizarUsuario(
         usuarioId,
@@ -312,6 +420,10 @@ class BancoService {
     }
 
 
+    /* =========================================
+       CAMBIO DE CONTRASEÑA
+    ========================================= */
+
     cambiarPassword(
         usuarioId,
         passwordActual,
@@ -394,6 +506,10 @@ class BancoService {
         return true;
     }
 
+
+    /* =========================================
+       ELIMINAR USUARIO
+    ========================================= */
 
     eliminarUsuario(
         usuarioId,
@@ -500,12 +616,10 @@ class BancoService {
             usuariosFiltrados,
         );
 
-
         storageService.guardar(
             STORAGE_KEYS.CUENTAS,
             cuentasFiltradas,
         );
-
 
         storageService.guardar(
             STORAGE_KEYS.MOVIMIENTOS,
