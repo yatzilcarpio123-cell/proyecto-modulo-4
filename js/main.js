@@ -30,14 +30,55 @@ import { Movimiento } from './models/Movimiento.js';
 
 import { Banco } from './models/Banco.js';
 
-
-/* ========================================= 
-	PUNTO DE ENTRADA DE LA APLICACIÓN 
-========================================= */
+import { STORAGE_KEYS, storageService } from './services/StorageService.js';
 
 // Mostramos la versión actual del proyecto
-console.log('Sistema de Gestión Bancaria - v0.2.0');
+console.log('Sistema de Gestión Bancaria - v0.5.0');
 
+/* FUNCIONES DE PERSISTENCIA EN LOCALSTORAGE */
+// funcion para guardar el estado del banco
+function guardarBanco(banco){
+    //guardamos usuarios
+    storageService.guardar(STORAGE_KEYS.USUARIOS, banco.usuarios);
+
+    //guardamos cuentas
+    storageService.guardar(STORAGE_KEYS.CUENTAS, banco.cuentas);
+
+    //guardamos movimientos
+    storageService.guardar(STORAGE_KEYS.MOVIMIENTOS, banco.movimientos);
+}
+
+//función para cargar los datos del banco 
+function cargarBanco(){
+    //datos de usuario
+    const usuariosGuardados = storageService.obtener(STORAGE_KEYS.USUARIOS, []);
+
+    //datos de cuentas
+    const cuentasGuardadas = storageService.obtener(STORAGE_KEYS.CUENTAS, []);
+
+    //datos de movimientos
+    const movimientosGuardados = storageService.obtener(STORAGE_KEYS.MOVIMIENTOS, []);
+
+    //reconstruimos usuarios
+    const usuarios = usuariosGuardados.map((usuario) => new Usuario(usuario));
+
+    //reconstruir cuentas
+    const cuentas = cuentasGuardadas.map((cuenta) => new Cuenta (cuenta));
+
+    //reconstruir movimientos 
+    const movimientos = movimientosGuardados.map((movimiento) => new Movimiento(movimiento));
+
+    return new Banco({
+        usuarios,
+        cuentas,
+        movimientos
+    });
+
+
+}
+
+
+/* RECONSTRUIMOS LAS INSTANCIAS PARA RESUPERAR USUARIO Y SUS METODOS */
 // Validación de campo debe mostrar true
 console.log(
     'Campo obligatorio:',
@@ -75,101 +116,78 @@ console.log(
 );
 
 /* BANCO */
-const bancoDemo = new Banco;
+const bancoDemo = cargarBanco();
 
-/* ========================================== 
-			USUARIO 
-========================================== */ 
-const usuarioDemo = new Usuario({
-    nombre: 'Yatzil Carpio',
-    email: 'yatzil@correo.com',
-    telefono: '5580970111',
-    password: '123456',
-});
-bancoDemo.agregarUsuario(usuarioDemo);
-console.log('Usuarios registrados:', bancoDemo.usuarios);
-
-console.log(
-    'Usuario: ',
-    usuarioDemo,
-);
-
-/* ========================================== 
-				CUENTA
-Creamos una cuenta y la asociamos al usuario utilizando su ID
-========================================== */
-const cuentaDemo = new Cuenta({
-    numeroCuenta: '123456789012',
-    usuarioId: usuarioDemo.id,
-});
-
-console.log(
-    'Cuenta: ',
-    cuentaDemo,
-);
-
-bancoDemo.agregarCuenta(cuentaDemo);
-
-//DEPOSITO
-const depositoDemo = bancoDemo.realizarDeposito({
-    cuentaId: cuentaDemo.id,
-    monto: 1000,
-    descripcion: 'Desposito inicial'
-});
-
-//mostramos el saldio
-console.log('Saldo actual:', formatCurrency(cuentaDemo.saldo));
-
-//mostramos el movimiento generado
-console.log('Movimiento generado:', depositoDemo);
-
-//mostramos el historial general
-console.log(
-    'Movimientos registrados: ',
-    bancoDemo.movimientos,
-);
-
-/* BUSQUEDAS */
-const usuarioEncontrado = bancoDemo.buscarUsuarioPorId(usuarioDemo.id);
-console.log('Usuario encontrado:', usuarioEncontrado); 
-console.log(usuarioEncontrado === usuarioDemo);
-
-const cuentasUsuario = bancoDemo.obtenerCuentasdeUsuario(usuarioDemo.id);
-console.log('Cuentas del usuario: ', cuentasUsuario);
-
-/* RELACIONES */
-console.log('La cuenta pertenece al usuario:', usuarioDemo.id === cuentaDemo.usuarioId);
-console.log ('El deposito pertenece a la cuenta:', cuentaDemo.id === depositoDemo.id === depositoDemo.cuentaOrigen);
-
-/* REGLA NEGATIVA */
-try {
-    bancoDemo.realizarDeposito({
-        cuentaId: cuentaDemo.depositar,
-        monto: -100,
-    });
-} catch (error) {
-    console.log(
-        'Error',
-        error.message);
+//validamos si el banco está vacío
+if(bancoDemo.usuarios.length === 0){
+    //creamos usuario inicial
+    const usuarioDemo =
+        new Usuario({
+            nombre: 'Yatzil Carpio',
+            email: 'yatzil@correo.com',
+            telefono: '5580970111',
+            password: '123456'
+        });
     
+    bancoDemo.agregarUsuario(usuarioDemo)
+
+    //creamos la cuenta inicial 
+    const cuentaDemo = new Cuenta ({
+        numeroCuenta: '123456789',
+        usuarioId: usuarioDemo.id
+    });
+
+    //registramos cuenta
+    bancoDemo.agregarCuenta(cuentaDemo);
+
+    //realizamos depósito inicial
+    bancoDemo.realizarDeposito({
+        cuentaId: cuentaDemo.id,
+        monto: 1000,
+        descripcion: 'Deposito inicial'
+    });
+
+    //guardamos el banco
+    guardarBanco(bancoDemo);
+
+    console.log ('Datos iniciales creados y guardados');
 }
 
-/* ========================================== 
-				MOVIMIENTO
-Representamos manualmente el depósito mediante una instancia
-de movimiento
-========================================== */
-const movimientoDemo = new Movimiento({
-    tipo: 'DEPOSITO',
-    monto: 1000,
-    descripcion: 'Depósito inicial',
-    cuentaOrigen: cuentaDemo.id,
-    saldoResultante: cuentaDemo.saldo,
-});
+//COMPROBAMOS LOS DATOS RECUPERADOS
+console.log('Banco recuperado:', bancoDemo);
 
-//mostramsos el movimeinto creado
-console.log (
-    'Movimiento: ',
-    movimientoDemo,
-);
+//mostramos los usuarios
+console.log('Usuarios almacenados:', bancoDemo.usuarios);
 
+//mostramos las cuentas
+console.log('Cuentas almacenadas:', bancoDemo.cuentas);
+
+//mostrar movimientos
+console.log('Movimientos almacenados', bancoDemo.movimientos);
+
+/* ========================================= 
+		OBTENER PRIMERA CUENTA 
+========================================= */
+const cuentaPrincipal =
+    bancoDemo.cuentas[0] || null;
+
+//mostrar saldo 
+if (cuentaPrincipal) {
+    console.log(
+        'Saldo persistido:',
+        // /* Convertimos el saldo a formato monetario antes de mostrarlo. */
+        formatCurrency(
+            cuentaPrincipal.saldo,
+        ),
+    );
+    console.log(
+        '¿La cuenta recuperada sigue siendo una instancia de Cuenta?',
+        cuentaPrincipal
+            instanceof Cuenta,
+    );
+    console.log(
+        'Tipo de depositar:',
+        typeof cuentaPrincipal.depositar,
+    );
+
+}
