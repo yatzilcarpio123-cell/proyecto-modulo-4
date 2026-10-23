@@ -2,7 +2,7 @@
 
 Proyecto integrador correspondiente al Módulo 4.
 
-El sistema se desarrolla progresivamente utilizando JavaScript moderno, programación orientada a objetos, programación funcional, arquitectura modular y persistencia local.
+El proyecto utiliza JavaScript moderno, programación orientada a objetos, programación funcional, arquitectura modular, manipulación del DOM, LocalStorage y librerías externas.
 
 ## Tecnologías
 
@@ -10,10 +10,10 @@ El sistema se desarrolla progresivamente utilizando JavaScript moderno, programa
 - CSS3
 - JavaScript
 - ECMAScript Modules
-- LocalStorage
-- SweetAlert2
 - Node.js
 - npm
+- LocalStorage
+- SweetAlert2
 - Git
 - GitHub
 
@@ -37,6 +37,7 @@ js/
 ├── ui/
 │   ├── CuentaUI.js
 │   ├── DashboardUI.js
+│   ├── MovimientosUI.js
 │   └── TransferenciasUI.js
 │
 └── utils/
@@ -45,99 +46,180 @@ js/
     └── validators.js
 ```
 
-## Páginas actuales
+## Páginas
+
+La aplicación actualmente contiene:
 
 - `index.html`
 - `dashboard.html`
 - `cuenta.html`
+- `movimientos.html`
 - `transferencia.html`
+
+## Autenticación
+
+El sistema permite:
+
+- Registrar usuarios.
+- Iniciar sesión.
+- Mantener sesión mediante LocalStorage.
+- Cerrar sesión.
+- Proteger páginas privadas.
+
+## Dashboard
+
+El dashboard muestra:
+
+- Usuario autenticado.
+- Saldo total.
+- Cantidad de cuentas.
+- Cantidad de movimientos.
+- Cuenta principal.
+- Saldo disponible.
+
+## Mi cuenta
+
+La página de cuenta permite:
+
+- Consultar datos bancarios.
+- Modificar información personal.
+- Cambiar contraseña.
+- Eliminar la cuenta cuando el saldo sea cero.
 
 ## Operaciones bancarias
 
+Actualmente se soportan:
+
 ### Depósitos
 
-El sistema permite depositar dinero en una cuenta.
+Los depósitos:
 
-La operación:
-
-1. Valida el monto.
-2. Busca la cuenta.
-3. Actualiza el saldo.
-4. Genera un movimiento `DEPOSITO`.
-5. Guarda el saldo resultante.
-6. Persiste la operación.
+1. Validan el monto.
+2. Actualizan el saldo.
+3. Generan un movimiento `DEPOSITO`.
+4. Persisten la operación.
 
 ### Transferencias
 
-El sistema permite transferir dinero entre cuentas.
+Las transferencias:
 
-La operación:
+1. Validan cuenta origen.
+2. Validan cuenta destino.
+3. Validan el monto.
+4. Evitan transferencias a la misma cuenta.
+5. Validan saldo suficiente.
+6. Retiran dinero de la cuenta origen.
+7. Depositan dinero en la cuenta destino.
+8. Generan `TRANSFERENCIA_ENVIADA`.
+9. Generan `TRANSFERENCIA_RECIBIDA`.
+10. Persisten saldos y movimientos.
 
-1. Valida el monto.
-2. Localiza la cuenta origen.
-3. Localiza la cuenta destino.
-4. Comprueba que ambas cuentas estén activas.
-5. Evita transferencias a la misma cuenta.
-6. Comprueba saldo suficiente.
-7. Retira dinero de la cuenta origen.
-8. Deposita dinero en la cuenta destino.
-9. Genera `TRANSFERENCIA_ENVIADA`.
-10. Genera `TRANSFERENCIA_RECIBIDA`.
-11. Persiste las cuentas y movimientos.
+## Movimientos
 
-## Tipos de movimientos actuales
+La página `movimientos.html` permite consultar el historial bancario.
+
+Los tipos soportados son:
 
 - `DEPOSITO`
 - `TRANSFERENCIA_ENVIADA`
 - `TRANSFERENCIA_RECIBIDA`
 
-## SweetAlert2
+## Perspectiva del usuario
 
-En las transferencias se utiliza para:
+Los movimientos se muestran de acuerdo con la cuenta del usuario.
 
-- Validaciones.
-- Confirmación previa.
-- Saldo insuficiente.
-- Cuenta inexistente.
-- Transferencia a la misma cuenta.
-- Transferencia exitosa.
-- Depósito exitoso.
-- Errores de operación.
+Un depósito pertenece al usuario cuando su cuenta es la cuenta origen.
 
-## Funcionalidades implementadas
+Una transferencia enviada pertenece al usuario cuando una de sus cuentas es la cuenta origen.
 
-Actualmente la aplicación permite:
+Una transferencia recibida pertenece al usuario cuando una de sus cuentas es la cuenta destino.
 
-- Registrar usuarios.
-- Crear cuentas bancarias.
-- Iniciar sesión.
-- Mantener sesión.
-- Proteger páginas.
-- Mostrar dashboard.
-- Consultar información bancaria.
-- Actualizar perfil.
-- Cambiar contraseña.
-- Eliminar usuario.
-- Realizar depósitos.
-- Realizar transferencias.
-- Actualizar saldos.
-- Registrar transferencias enviadas.
-- Registrar transferencias recibidas.
-- Persistir operaciones con LocalStorage.
+Esto evita mostrar las dos representaciones de una transferencia al mismo usuario.
 
-## Próxima versión
+## Filtros
 
-La siguiente versión implementará:
+El historial permite filtrar por:
 
-- `movimientos.html`
-- Historial de operaciones.
-- Filtros.
+- Todos.
 - Depósitos.
 - Transferencias enviadas.
 - Transferencias recibidas.
-- Ordenamiento por fecha.
-- Formato de importes y saldos.
+
+## Ordenamiento
+
+Los movimientos se ordenan desde la operación más reciente hasta la más antigua.
+
+## Programación funcional aplicada
+
+Durante el proyecto se utilizan métodos como:
+
+- `map()`
+- `filter()`
+- `find()`
+- `findIndex()`
+- `some()`
+- `reduce()`
+- `forEach()`
+- `includes()`
+- `sort()`
+- `flatMap()`
+
+También se utiliza:
+
+- Destructuring.
+- Spread Operator.
+- Template literals.
+- Operador ternario.
+
+## SweetAlert2
+
+SweetAlert2 se utiliza para:
+
+- Validaciones.
+- Mensajes de éxito.
+- Errores.
+- Confirmación de transferencias.
+- Confirmación de cierre de sesión.
+- Confirmación de eliminación de usuario.
+
+## Funcionalidades implementadas
+
+Actualmente el proyecto permite:
+
+- Registrar usuarios.
+- Crear cuentas.
+- Autenticarse.
+- Mantener sesión.
+- Consultar Dashboard.
+- Consultar Mi cuenta.
+- Modificar datos.
+- Cambiar contraseña.
+- Eliminar cuenta.
+- Realizar depósitos.
+- Realizar transferencias.
+- Actualizar saldos.
+- Registrar movimientos.
+- Mostrar depósitos.
+- Mostrar transferencias enviadas.
+- Mostrar transferencias recibidas.
+- Filtrar movimientos.
+- Ordenar movimientos por fecha.
+- Mantener persistencia con LocalStorage.
+
+## Próximas versiones
+
+La siguiente versión incorporará principalmente:
+
+- Jest.
+- jsdom.
+- Pruebas de modelos.
+- Pruebas de utilidades.
+- Pruebas de AuthService.
+- Pruebas de BancoService.
+- Pruebas de operaciones bancarias.
+- Pruebas de casos negativos.
+
 
 ## Versión actual
 
-v0.9.0 — Operaciones bancarias y transferencias.
+v0.10.0 — Historial de movimientos y filtros.
