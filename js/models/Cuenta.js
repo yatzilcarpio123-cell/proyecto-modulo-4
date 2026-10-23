@@ -1,12 +1,12 @@
 /* ========================================= 
-		IMPORTAR UTILIDADES 
+        IMPORTAR UTILIDADES 
 ========================================= */
 // Importamos generarId() para asignar automáticamente un identificador interno a cada cuenta.
 import { generarId } from '../utils/helpers.js';
 
 
 /* ========================================= 
-			MODELO CUENTA
+            MODELO CUENTA
 Representa una cuenta bancaria perteneciente a un usuario. 
 ========================================= */
 export class Cuenta {
@@ -21,10 +21,10 @@ export class Cuenta {
         fechaApertura = new Date().toISOString(),
         activa = true,
     }) {
-	    
-	    /* ================================= 
-			    ASIGNAR PROPIEDADES 
-		================================= */
+        
+        /* ================================= 
+                ASIGNAR PROPIEDADES 
+        ================================= */
         this.id = id;
         this.numeroCuenta = numeroCuenta;
         this.tipo = tipo;
@@ -35,7 +35,7 @@ export class Cuenta {
     }
 
 /* ===================================== 
-			DEPOSITAR 
+            DEPOSITAR 
 Incrementa el saldo actual utilizando el monto recibido.
 ===================================== */
     depositar(monto) {
@@ -45,11 +45,17 @@ Incrementa el saldo actual utilizando el monto recibido.
     }
 
 /* ===================================== 
-				RETIRAR
+                RETIRAR
 Disminuye el saldo actual utilizando el monto recibido.
 ===================================== */
     retirar(monto) {
-        this.saldo -= Number(monto);
+        const montoNumero = Number(monto);
+
+        if (montoNumero > this.saldo) {
+            throw new Error('Saldo insuficiente');
+        }
+
+        this.saldo -= montoNumero;
 
         return this.saldo;
     }

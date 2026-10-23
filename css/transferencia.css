@@ -6,7 +6,7 @@
     min-height: 100vh;
 
     background-color:
-        #f4f6f8;
+        #f0e4d2;
 }
 
 
@@ -48,13 +48,17 @@
     border-radius:
         14px;
 
+    border-left:
+        6px solid
+        #89a5c3;
+
     box-shadow:
         0 8px 24px
         rgba(
-            0,
-            0,
-            0,
-            0.05
+            137,
+            165,
+            195,
+            0.2
         );
 }
 
@@ -62,12 +66,15 @@
 .transferencia-header h2 {
     margin:
         6px 0;
+
+    color:
+        #1e293b;
 }
 
 
 .transferencia-header p {
     color:
-        #6b7280;
+        #475569;
 }
 
 
@@ -83,10 +90,14 @@
         18px;
 
     background-color:
-        #eff6ff;
+        #b1ccda;
 
     border-radius:
         12px;
+
+    border:
+        1px solid
+        #89a5c3;
 }
 
 
@@ -97,16 +108,22 @@
         8px;
 
     color:
-        #1d4ed8;
+        #0f172a;
 
     font-size:
         0.9rem;
+
+    font-weight:
+        600;
 }
 
 
 .saldo-disponible strong {
     font-size:
         1.6rem;
+
+    color:
+        #0f172a;
 }
 
 
@@ -138,6 +155,10 @@
     border-radius:
         14px;
 
+    border:
+        1px solid
+        #d0c4b6;
+
     box-shadow:
         0 8px 24px
         rgba(
@@ -152,6 +173,9 @@
 .transferencia-card h3 {
     margin-bottom:
         22px;
+
+    color:
+        #1e293b;
 }
 
 
@@ -163,13 +187,16 @@
 
     border:
         1px solid
-        #d1d5db;
+        #d0c4b6;
 
     border-radius:
         8px;
 
     background-color:
         #ffffff;
+
+    color:
+        #1e293b;
 
     font-size:
         1rem;
@@ -179,7 +206,7 @@
 .form-group select:focus {
     outline:
         2px solid
-        #2563eb;
+        #89a5c3;
 
     border-color:
         transparent;
@@ -191,7 +218,7 @@
         20px;
 
     color:
-        #6b7280;
+        #475569;
 
     line-height:
         1.5;

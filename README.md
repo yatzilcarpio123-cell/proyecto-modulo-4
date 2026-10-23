@@ -2,7 +2,7 @@
 
 Proyecto integrador correspondiente al Módulo 4.
 
-El proyecto utiliza JavaScript moderno, programación orientada a objetos, programación funcional, arquitectura modular, manipulación del DOM, LocalStorage y librerías externas.
+El proyecto utiliza JavaScript moderno, programación orientada a objetos, programación funcional, arquitectura modular, manipulación del DOM, LocalStorage, librerías externas y testing automatizado.
 
 ## Tecnologías
 
@@ -14,10 +14,12 @@ El proyecto utiliza JavaScript moderno, programación orientada a objetos, progr
 - npm
 - LocalStorage
 - SweetAlert2
+- Jest
+- jsdom
 - Git
 - GitHub
 
-## Arquitectura actual
+## Arquitectura
 
 ```text
 js/
@@ -48,178 +50,191 @@ js/
 
 ## Páginas
 
-La aplicación actualmente contiene:
-
 - `index.html`
 - `dashboard.html`
 - `cuenta.html`
 - `movimientos.html`
 - `transferencia.html`
 
-## Autenticación
+## Funcionalidades
 
 El sistema permite:
 
 - Registrar usuarios.
-- Iniciar sesión.
-- Mantener sesión mediante LocalStorage.
-- Cerrar sesión.
-- Proteger páginas privadas.
-
-## Dashboard
-
-El dashboard muestra:
-
-- Usuario autenticado.
-- Saldo total.
-- Cantidad de cuentas.
-- Cantidad de movimientos.
-- Cuenta principal.
-- Saldo disponible.
-
-## Mi cuenta
-
-La página de cuenta permite:
-
-- Consultar datos bancarios.
-- Modificar información personal.
-- Cambiar contraseña.
-- Eliminar la cuenta cuando el saldo sea cero.
-
-## Operaciones bancarias
-
-Actualmente se soportan:
-
-### Depósitos
-
-Los depósitos:
-
-1. Validan el monto.
-2. Actualizan el saldo.
-3. Generan un movimiento `DEPOSITO`.
-4. Persisten la operación.
-
-### Transferencias
-
-Las transferencias:
-
-1. Validan cuenta origen.
-2. Validan cuenta destino.
-3. Validan el monto.
-4. Evitan transferencias a la misma cuenta.
-5. Validan saldo suficiente.
-6. Retiran dinero de la cuenta origen.
-7. Depositan dinero en la cuenta destino.
-8. Generan `TRANSFERENCIA_ENVIADA`.
-9. Generan `TRANSFERENCIA_RECIBIDA`.
-10. Persisten saldos y movimientos.
-
-## Movimientos
-
-La página `movimientos.html` permite consultar el historial bancario.
-
-Los tipos soportados son:
-
-- `DEPOSITO`
-- `TRANSFERENCIA_ENVIADA`
-- `TRANSFERENCIA_RECIBIDA`
-
-## Perspectiva del usuario
-
-Los movimientos se muestran de acuerdo con la cuenta del usuario.
-
-Un depósito pertenece al usuario cuando su cuenta es la cuenta origen.
-
-Una transferencia enviada pertenece al usuario cuando una de sus cuentas es la cuenta origen.
-
-Una transferencia recibida pertenece al usuario cuando una de sus cuentas es la cuenta destino.
-
-Esto evita mostrar las dos representaciones de una transferencia al mismo usuario.
-
-## Filtros
-
-El historial permite filtrar por:
-
-- Todos.
-- Depósitos.
-- Transferencias enviadas.
-- Transferencias recibidas.
-
-## Ordenamiento
-
-Los movimientos se ordenan desde la operación más reciente hasta la más antigua.
-
-## Programación funcional aplicada
-
-Durante el proyecto se utilizan métodos como:
-
-- `map()`
-- `filter()`
-- `find()`
-- `findIndex()`
-- `some()`
-- `reduce()`
-- `forEach()`
-- `includes()`
-- `sort()`
-- `flatMap()`
-
-También se utiliza:
-
-- Destructuring.
-- Spread Operator.
-- Template literals.
-- Operador ternario.
-
-## SweetAlert2
-
-SweetAlert2 se utiliza para:
-
-- Validaciones.
-- Mensajes de éxito.
-- Errores.
-- Confirmación de transferencias.
-- Confirmación de cierre de sesión.
-- Confirmación de eliminación de usuario.
-
-## Funcionalidades implementadas
-
-Actualmente el proyecto permite:
-
-- Registrar usuarios.
 - Crear cuentas.
-- Autenticarse.
+- Iniciar sesión.
 - Mantener sesión.
-- Consultar Dashboard.
-- Consultar Mi cuenta.
-- Modificar datos.
+- Cerrar sesión.
+- Proteger páginas.
+- Consultar dashboard.
+- Consultar datos bancarios.
+- Modificar perfil.
 - Cambiar contraseña.
 - Eliminar cuenta.
 - Realizar depósitos.
 - Realizar transferencias.
 - Actualizar saldos.
 - Registrar movimientos.
-- Mostrar depósitos.
-- Mostrar transferencias enviadas.
-- Mostrar transferencias recibidas.
-- Filtrar movimientos.
-- Ordenar movimientos por fecha.
-- Mantener persistencia con LocalStorage.
+- Consultar movimientos.
+- Filtrar depósitos.
+- Filtrar transferencias enviadas.
+- Filtrar transferencias recibidas.
+- Persistir información con LocalStorage.
 
-## Próximas versiones
+## Testing
 
-La siguiente versión incorporará principalmente:
+El proyecto utiliza Jest para pruebas automatizadas.
 
-- Jest.
-- jsdom.
-- Pruebas de modelos.
-- Pruebas de utilidades.
-- Pruebas de AuthService.
-- Pruebas de BancoService.
-- Pruebas de operaciones bancarias.
-- Pruebas de casos negativos.
+Como el proyecto trabaja con ECMAScript Modules se ejecuta Jest mediante:
 
+```bash
+node --experimental-vm-modules node_modules/jest/bin/jest.js
+```
+
+El entorno configurado es:
+
+```text
+jsdom
+```
+
+porque algunos servicios dependen de APIs propias del navegador como LocalStorage.
+
+## Ejecutar las pruebas
+
+Instalar dependencias:
+
+```bash
+npm install
+```
+
+Ejecutar todas las pruebas:
+
+```bash
+npm test
+```
+
+Ejecutar una suite:
+
+```bash
+npm test -- BancoService.test.js
+```
+
+Ejecutar una prueba por nombre:
+
+```bash
+npm test -- -t "debe realizar y persistir una transferencia"
+```
+
+## Suites de pruebas
+
+Actualmente existen:
+
+- `validators.test.js`
+- `helpers.test.js`
+- `Usuario.test.js`
+- `Cuenta.test.js`
+- `Movimiento.test.js`
+- `AuthService.test.js`
+- `Banco.test.js`
+- `BancoService.test.js`
+
+## Cobertura funcional de las pruebas
+
+Las pruebas validan:
+
+### Utilidades
+
+- Campos obligatorios.
+- Montos.
+- Generación de IDs.
+- Generación de números de cuenta.
+
+### Usuario
+
+- Creación de usuario.
+- Generación de ID.
+- Estado inicial.
+
+### Cuenta
+
+- Creación.
+- Depósitos.
+- Retiros.
+- Saldo insuficiente.
+
+### Movimiento
+
+- Creación.
+- Identificador.
+- Fecha.
+
+### AuthService
+
+- Login correcto.
+- Login incorrecto.
+- Usuario autenticado.
+- Logout.
+
+### Banco
+
+- Transferencias.
+- Actualización de saldos.
+- Movimientos enviados.
+- Movimientos recibidos.
+- Misma cuenta.
+- Saldo insuficiente.
+
+### BancoService
+
+- Persistencia de depósitos.
+- Persistencia de transferencias.
+- Actualización de usuarios.
+- Reglas de eliminación.
+
+## Resultado esperado
+
+```text
+Test Suites: 8 passed, 8 total
+Tests:       26 passed, 26 total
+Snapshots:   0 total
+```
+
+## Control de versiones
+
+El proyecto se desarrolló incrementalmente:
+
+```text
+v0.1.0  Estructura inicial
+v0.2.0  Arquitectura modular
+v0.3.0  Modelos POO
+v0.4.0  Dominio bancario
+v0.5.0  LocalStorage
+v0.6.0  Autenticación
+v0.7.0  Dashboard
+v0.8.0  Gestión de cuenta
+v0.9.0  Transferencias
+v0.10.0 Movimientos
+v0.11.0 Testing
+```
+
+## Próxima versión
+
+La siguiente versión será:
+
+```text
+v1.0.0
+```
+
+y estará enfocada en:
+
+- Revisión integral.
+- Refactorización.
+- Pruebas finales.
+- Limpieza del proyecto.
+- Revisión de navegación.
+- Documentación final.
+- Release estable.
 
 ## Versión actual
 
-v0.10.0 — Historial de movimientos y filtros.
+v0.11.0 — Testing automatizado con Jest.
